@@ -1,0 +1,18 @@
+[
+  {
+    "ContainingType": "Servi\u00E7os.Controllers.UsuarioController",
+    "Method": "Cadastrar",
+    "RelativePath": "api/Usuario",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarios",
+        "Type": "Servi\u00E7os.Tabelas.Usuarios",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
