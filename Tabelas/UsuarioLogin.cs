@@ -11,5 +11,8 @@ namespace Serviços.Tabelas
         [Required(ErrorMessage = "Senha não pode estar vazio")]
         [MinLength(6, ErrorMessage = "A senha tem que ter pelo menos 6 caracter")]
         public required string Senha { get; set; }
+
+        [Required(ErrorMessage = "Nome é obrigatório")]
+        public required string Nome { get; set; }
     }
 }

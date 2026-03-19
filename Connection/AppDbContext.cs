@@ -10,5 +10,6 @@ namespace Serviços.Connection
         }
 
         public DbSet<Usuarios> Usuarios { get; set; }
+        public DbSet<RefreshToken> refreshTokens { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace Serviços.Tabelas
 
         [Required(ErrorMessage = "Email é obrigatório")]
         [EmailAddress(ErrorMessage = "Email invalido")]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@gmail\.com$",ErrorMessage = "Somente emails @gmail.com são permitidos")]
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@gmail\.com$", ErrorMessage = "Somente emails @gmail.com são permitidos")]
         public required string Email { get; set; }
 
         [Required(ErrorMessage = "Senha é obrigatório")]
@@ -30,7 +30,15 @@ namespace Serviços.Tabelas
 
     public class UsuarioToken
     {
-        public Usuarios Usuario { get; set; }
+        public UsuarioLogin Usuario { get; set; }
         public string Token { get; set; }
+    }
+
+    public class UsuarioConfirmacao
+    {
+        public Usuarios Usuario { get; set; }
+        public string? Codigo { get; set; }
+        public int Tentativas { get; set; } = 0;
+        public DateTime UltimaTentativa { get; set; }
     }
 }
