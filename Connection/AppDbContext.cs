@@ -11,5 +11,7 @@ namespace Serviços.Connection
 
         public DbSet<Usuarios> Usuarios { get; set; }
         public DbSet<RefreshToken> refreshTokens { get; set; }
+        public DbSet<Agendamento> Agendamento { get; set; }
+        public DbSet<Local> Locais { get; set; }
     }
 }

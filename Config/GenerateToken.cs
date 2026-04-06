@@ -23,7 +23,7 @@ namespace Serviços.Config
             _issuerConfirm = configuration["JwtSettings:IssuerConfirm"];
             _audienceConfirm = configuration["JwtSettings:AudienceConfirm"];
         }
-        public string GerarToken(string Nome)
+        public string GerarToken(string Nome, string Email)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_SecretKey));
             var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -31,6 +31,7 @@ namespace Serviços.Config
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, Nome),
+                new Claim(ClaimTypes.Email, Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

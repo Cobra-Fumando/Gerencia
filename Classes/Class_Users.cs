@@ -31,11 +31,16 @@ namespace Serviços.Classes
         public async Task<TabelaProblem<UsuarioDto>> AdicionarUser(Usuarios usuarios)
         {
             string getToken = string.Empty;
+            if(usuarios.NomeCompleto.Length < 15)
+            {
+                return StatusProblem.Fail<UsuarioDto>("Digite seu nome completo", null);
+            }
+
             try
             {
                 Usuarios UsuarioCriado = new Usuarios
                 {
-                    Nome = usuarios.Nome,
+                    NomeCompleto = usuarios.NomeCompleto,
                     Email = usuarios.Email,
                     Senha = hasher.HashPassword(usuarios.Senha),
                     Telefone = usuarios.Telefone,
@@ -79,9 +84,9 @@ namespace Serviços.Classes
 
                     cache.Set($"Usuario_{user.Email}", confirmacao, cacheEntryOptions);
 
-                    getToken = generateToken.GerarTokenConfirmacao(user.Nome, user.Email);
+                    getToken = generateToken.GerarTokenConfirmacao(user.NomeCompleto, user.Email);
 
-                    await enviarMensagem.Enviar("Emaiempresa", "Verificar Email", user.Email, $"Seu codigo é: {codigo}", "Senha aplicativo", getToken);
+                    await enviarMensagem.Enviar("Emailempresa", "Verificar Email", user.Email, $"Seu codigo é: {codigo}", "Senha aplicativo", getToken);
 
                     logger.LogInformation("Usuário adicionado ao cache: {Email}", user.Email);
                 }
@@ -169,7 +174,7 @@ namespace Serviços.Classes
                     if (user == null) return StatusProblem.Fail<UsuarioToken>("Usuário ou senha inválidos", null);
                     if (!hasher.verificar(Senha, user.Senha)) return StatusProblem.Fail<UsuarioToken>("Usúario ou senha inválidos", null);
 
-                    string Token = generateToken.GerarToken(user.Nome);
+                    string Token = generateToken.GerarToken(user.NomeCompleto, Email);
                     refreshToken = Guid.NewGuid().ToString();
                     string? refreshTokenCryp = HashToken.GerarHashToken(refreshToken);
 
@@ -183,7 +188,7 @@ namespace Serviços.Classes
 
                     context.refreshTokens.Add(new RefreshToken
                     {
-                        Nome = user.Nome,
+                        Nome = user.NomeCompleto,
                         Token = refreshTokenCryp,
                         Email = user.Email,
                         Expiration = DateTime.UtcNow.AddDays(7)
@@ -196,7 +201,7 @@ namespace Serviços.Classes
                         Usuario = new UsuarioLogin
                         {
                             Email = user.Email,
-                            Nome = user.Nome,
+                            Nome = user.NomeCompleto,
                             Senha = string.Empty
                         },
                         Token = Token
@@ -219,7 +224,7 @@ namespace Serviços.Classes
                     return StatusProblem.Fail<UsuarioToken>("Token de atualização inválido", null);
                 }
 
-                var TokenNovo = generateToken.GerarToken(TokenInformation.Nome);
+                var TokenNovo = generateToken.GerarToken(TokenInformation.Nome, TokenInformation.Email);
                 var refreshTokenNovo = Guid.NewGuid().ToString();
                 var refreshTokenNovoCryp = HashToken.GerarHashToken(refreshTokenNovo);
 

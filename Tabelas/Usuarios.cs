@@ -12,7 +12,7 @@ namespace Serviços.Tabelas
         [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Nome é obrigatório")]
-        public required string Nome { get; set; }
+        public required string NomeCompleto { get; set; }
 
         [Required(ErrorMessage = "Email é obrigatório")]
         [EmailAddress(ErrorMessage = "Email invalido")]
