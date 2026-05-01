@@ -48,5 +48,35 @@ namespace Serviços.Config
             await smtp.DisconnectAsync(true);
 
         }
+
+        public async Task EnviarEmail(string email, string assunto, string EmailDestino ,string Remetente, string mensagem, string senha)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("Serviços", email));
+            message.To.Add(MailboxAddress.Parse(EmailDestino));
+
+            message.Subject = assunto;
+
+            var body = new TextPart("html")
+            {
+                Text = $@"
+                <html>
+                    <body style='font-family: Arial;'>
+                        <h1>{assunto}</h1>
+                            <p>{mensagem}</p>
+                
+                    </body>
+                </html>
+                "
+            };
+
+            using var smtp = new SmtpClient();
+
+            await smtp.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+            await smtp.AuthenticateAsync(email, senha);
+            await smtp.SendAsync(message);
+            await smtp.DisconnectAsync(true);
+
+        }
     }
 }

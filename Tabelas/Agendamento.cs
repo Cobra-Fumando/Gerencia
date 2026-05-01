@@ -10,19 +10,21 @@ namespace Serviços.Tabelas
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Nome é obrigatório")]
-        public string NomeCompleto { get; set; }
+        public required string NomeCompleto { get; set; }
 
         [Required(ErrorMessage = "Email não pode estar vazio")]
         [EmailAddress(ErrorMessage = "Email invalido")]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@gmail\.com$", ErrorMessage = "Somente emails @gmail.com são permitidos")]
-        public string Email { get; set; }
+        public required string Email { get; set; }
 
         [Required(ErrorMessage = "Cpf não pode estar vazio")]
-        public string Cpf { get; set; }
+        public required string Cpf { get; set; }
 
-        [Required(ErrorMessage = "Email não pode estar vazio")]
+        [Required(ErrorMessage = "Telefone não pode estar vazio")]
         public string Telefone { get; set; }
         public DateTime DataAgendamento { get; set; }
+
+        public bool MensagemEnviada { get; set; } = false;
 
         [ForeignKey("Local")]
         public int LocalId { get; set; }

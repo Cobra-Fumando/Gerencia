@@ -4,18 +4,27 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serviços.Baclground;
 using Serviços.Classes;
 using Serviços.Config;
 using Serviços.Connection;
 using Serviços.Interfaces;
 using Serviços.Tabelas;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("C:\\Users\\Thiago\\source\\repos\\Serviços\\Serviços\\Logs\\logs.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -27,10 +36,9 @@ builder.Services.AddScoped<Hasher>();
 builder.Services.AddScoped<GerarNumero>();
 builder.Services.AddScoped<EnviarMensagem>();
 builder.Services.AddHttpContextAccessor();
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.AddDebug();
 builder.Services.AddMemoryCache();
+
+builder.Services.AddHostedService<CheckAgenda>();
 
 builder.Services.AddDbContextPool<AppDbContext>(options =>
 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
